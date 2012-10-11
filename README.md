@@ -11,7 +11,7 @@ in the search listing, it opens the file without a line number specified.
 
 ## Key Binding
 
-- The default key binding is "enter".
+- The default key binding is "ctrl + enter".
 
 ## Customizing
 

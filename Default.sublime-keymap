@@ -1,6 +1,6 @@
 [
     {
-        "keys": ["enter"],
+        "keys": ["ctrl+enter"],
         "command": "open_search_result"
     }
 ]
