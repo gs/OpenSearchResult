@@ -1,6 +1,6 @@
 import os
+import re
 import sublime, sublime_plugin
-import util
 
 
 class HighlightFilePaths(sublime_plugin.EventListener):
@@ -23,9 +23,9 @@ class HighlightFilePaths(sublime_plugin.EventListener):
         for s in view.sel():
             line = view.line(s)
             line_str = view.substr(view.line(s))
-            line_num = util.parse_line_number(line_str)
+            line_num = Util.parse_line_number(line_str)
 
-            if util.is_file_path(line_str) or line_num:
+            if Util.is_file_path(line_str) or line_num:
                 valid_regions.append(line)
 
         if valid_regions:
@@ -108,19 +108,30 @@ class OpenSearchResultCommand(sublime_plugin.TextCommand):
                 break
 
             line = self.view.substr(prev).strip()
-            if util.is_file_path(line):
+            if Util.is_file_path(line):
                 return self.open_file_from_line(line, line_num)
 
     def run(self, edit):
         for cursor in self.view.sel():
             cur_line = self.view.line(cursor)
             line_str = self.view.substr(cur_line).strip()
-            line_num = util.parse_line_number(line_str)
+            line_num = Util.parse_line_number(line_str)
 
             if self.view.name() != 'Find Results':
                 return
 
-            if util.is_file_path(line_str):
+            if Util.is_file_path(line_str):
                 self.open_file_path(line_str)
             elif line_num:
                 self.open_file_at_line_num(cur_line, line_num)
+
+class Util:
+    def parse_line_number(line_str):
+        parts = line_str.split()
+        line_num = parts[0].strip().replace(':', '')
+        return line_num
+
+
+    def is_file_path(line_str):
+        return re.match("^(/|\w:\\\).*:$", line_str) is not None
+
